@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm
+from .models import Level, User_Level_Record
 
 def home(request):
-    context = {}
+    levels = Level.objects.all()
+    context = {'levels': levels}
     return render(request, 'home.html', context)
     
 def login_user(request):

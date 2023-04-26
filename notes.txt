@@ -1,0 +1,12 @@
+Run server with: python3 manage.py runserver
+
+DB commands:
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+Run virtual environment with: source virt/bin/activate
+
+push to git with:
+git add .
+git commit -am '{title}'
+git push

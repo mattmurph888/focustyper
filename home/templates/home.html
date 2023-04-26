@@ -3,8 +3,23 @@
 
 	{% include 'navbar.html' %}
 
-	<div class=" container col-md-6 offset-md-3">
+	<div class=" container col-md-8 ">
 		<h1>home page</h1>
+
+		<div class="row row-cols-1 row-cols-md-4 g-4">
+			{% for level in levels%}
+				<div class="col">
+					<div class="card text-bg-secondary mb-3 h-100" style="max-width: 15rem;">
+						<div class="card-header"> 
+							{{level.level_number}} 
+						</div>
+						<div class="card-body">
+							<h5 class="card-title"> {{level.level_title}} </h5>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
 
 {% endblock %}
