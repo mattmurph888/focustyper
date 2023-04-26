@@ -9,6 +9,11 @@ def home(request):
     context = {'levels': levels}
     return render(request, 'home.html', context)
     
+def play(request, level_num=None):
+    level = Level.objects.get(level_number = level_num)
+    context = {'level': level}
+    return render(request, 'play.html', context)
+
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('home')
