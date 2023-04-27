@@ -1,0 +1,55 @@
+html,
+body {
+	height: 100vh;
+}
+
+nav {
+    height: 55px;
+}
+
+.play-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+    overflow: hidden;
+	border: 1px solid purple;
+	height: calc(100vh - 55px);
+    margin-left: 25%;
+	width: 50%;
+}
+
+.play-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+	border: 1px solid red;
+}
+
+.play-title {
+    font-size: 2em;
+}
+
+.play-text {
+    display: flex;
+	border: 1px solid green;
+    font-family: monospace;
+    font-size: 2em;
+    margin-left: calc(50% - 1em);
+}
+
+.letter {
+    border: 1px solid black;
+    min-width: 1em;
+    max-width: 1em;
+}
+
+.play-stats {
+    display: flex;
+    justify-content: space-around;
+	border: 1px solid blue;
+}
+
+.play-data {
+    font-size: 2em;
+}

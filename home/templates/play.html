@@ -1,8 +1,31 @@
 {% extends 'base.html' %} 
-{% block content %}
+{% block content %} 
+    {% include 'navbar.html' %}
+    <div class="play-area">
+        <div class="play-info">
+            <div>Level {{level.level_number}}: </div>
+            <div class="play-title">{{level.level_title}}</div>
+        </div>
 
-	{% include 'navbar.html' %}
+        <div class="play-text">
+            {% for letter in level.level_text %}
+            <div class="letter">{{letter}}</div>
+            {% endfor %}
+        </div>
 
-	<h1> play level {{level.level_number}} </h1>
-
+        <div class="play-stats">
+            <div class="play-speed">
+                <div>speed: </div>
+                <div class="play-data">0</div>
+            </div> 
+            <div class="play-accuracy">
+                <div>accuracy: </div>
+                <div class="play-data">0</div>
+            </div> 
+            <div class="play-focus">
+                <div>focus: </div>
+                <div class="play-data">0</div>
+            </div> 
+        </div>
+    </div>
 {% endblock %}
