@@ -32,16 +32,38 @@ nav {
 
 .play-text {
     display: flex;
-	border: 1px solid green;
+	/* border: 1px solid green; */
     font-family: monospace;
     font-size: 2em;
-    margin-left: calc(50% - 1em);
+    margin-left: calc(50% - 0.5em);
+    transition: 0.2s;
 }
 
 .letter {
-    border: 1px solid black;
+    border-bottom: 1px solid black;
+    position: relative;
     min-width: 1em;
     max-width: 1em;
+    border-radius: 5px;
+	transition: 0.2s;
+}
+
+.letter::after {
+	display: inherit;
+	content: var(--content, '');
+	opacity: var(--letter_opacity, 0);
+	background-color: sandybrown;
+	min-width: inherit;
+    max-width: inherit;
+	height: inherit;
+	align-items: inherit;
+	justify-content: inherit;
+	border-radius: inherit;
+	padding: inherit;
+	transition: inherit;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .play-stats {
