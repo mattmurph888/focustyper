@@ -8,6 +8,7 @@ let cur_char_index = 0;
 let guessed = false;
 let update_speed_var;
 let clock_var;
+let num_key_presses = 0;
 letters[cur_char_index].style.boxShadow = '0px 1px 5px rgb(126, 126, 126)';
 document.addEventListener(
 	'keypress',
@@ -17,6 +18,8 @@ document.addEventListener(
 
         // if you have not finished the level
 		if (cur_char_index < letters.length) {
+
+
 			// take away the previous wrong letter overlay
 			letters[cur_char_index].style.setProperty('--letter_opacity', '0');
 
@@ -24,7 +27,7 @@ document.addEventListener(
 			if (name == letters[cur_char_index].innerHTML) {
                 // start the timer if it has not already
                 if (!time_started) {
-                    update_speed_var = setInterval(updateSpeed, 1000);
+                    update_displays_var = setInterval(updateDisplays, 1000);
                     clock_var = setInterval(clock, 100);
                     time_started = true;
                 }
@@ -47,8 +50,9 @@ document.addEventListener(
 
                 // if we have reached the end of the text, turn off the timer
                 if (cur_char_index >= letters.length) {
-                    clearInterval(update_speed_var);
+                    clearInterval(update_displays_var);
                     clearInterval(clock_var);
+                    setTimeout(toRecap, 2000);
                 }
 
 				// update the box shadow to the right letter only if not at the end
@@ -69,6 +73,11 @@ document.addEventListener(
 				guessed = true;
 			}
 		} 
+
+        // increment the number of key presses
+        if (time_started) {
+            num_key_presses += 1;
+        }
 	},
 	false
 );
@@ -86,17 +95,32 @@ document.addEventListener('keyup', (event) => {
 
 
 /**
- * Time display
+ * displays data from the current lesson being played
  */
 time_started = false;
-function updateSpeed() {
+function updateDisplays() {
     // calculate and display the current speed in wpm
-    cur_speed = (cur_char_index/5) / (cur_time/60);
-    document.getElementById('speed').innerHTML = parseInt(cur_speed);
-    console.log(cur_time);
+    let cur_speed = parseInt((cur_char_index/5) / (cur_time/60));
+    document.getElementById('speed').innerHTML = cur_speed;
+
+    // calculate and display the current accuracy percentage
+    let cur_accuracy = parseInt(cur_char_index / num_key_presses * 100);
+    document.getElementById('accuracy').innerHTML = cur_accuracy;
 }
 
+/**
+ * runs the clock
+ */
 cur_time = 0
 function clock() {
     cur_time += 0.1;
  }
+
+function toRecap() {
+    let recap_url = "http://127.0.0.1:8000/recap";
+    let level_num = document.getElementById('level-num').innerHTML;
+    let speed = document.getElementById('speed').innerHTML;
+    let accuracy = document.getElementById('accuracy').innerHTML;
+    let url = recap_url + "/" + level_num + "-" + speed + "-" + accuracy;
+    window.location.replace(url);
+}

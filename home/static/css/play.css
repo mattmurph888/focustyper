@@ -4,47 +4,47 @@ body {
 }
 
 nav {
-    height: 55px;
+	height: 55px;
 }
 
 .play-area {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    text-align: center;
-    overflow: hidden;
-	border: 1px solid purple;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	text-align: center;
+	overflow: hidden;
+	border: 1px solid pink;
 	height: calc(100vh - 55px);
-    margin-left: 25%;
-	width: 50%;
+	margin-left: 10%;
+	width: 80%;
 }
 
 .play-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	border: 1px solid red;
 }
 
 .play-title {
-    font-size: 2em;
+	font-size: 2em;
 }
 
 .play-text {
-    display: flex;
+	display: flex;
 	/* border: 1px solid green; */
-    font-family: monospace;
-    font-size: 2em;
-    margin-left: calc(50% - 0.5em);
-    transition: 0.2s;
+	font-family: monospace;
+	font-size: 2em;
+	margin-left: calc(50% - 0.5em);
+	transition: 0.2s;
 }
 
 .letter {
-    border-bottom: 1px solid black;
-    position: relative;
-    min-width: 1em;
-    max-width: 1em;
-    border-radius: 5px;
+	border-bottom: 1px solid black;
+	position: relative;
+	min-width: 1em;
+	max-width: 1em;
+	border-radius: 5px;
 	transition: 0.2s;
 }
 
@@ -54,24 +54,24 @@ nav {
 	opacity: var(--letter_opacity, 0);
 	background-color: sandybrown;
 	min-width: inherit;
-    max-width: inherit;
+	max-width: inherit;
 	height: inherit;
 	align-items: inherit;
 	justify-content: inherit;
 	border-radius: inherit;
 	padding: inherit;
 	transition: inherit;
-    position: absolute;
-    left: 0;
-    top: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 .play-stats {
-    display: flex;
-    justify-content: space-around;
+	display: flex;
+	justify-content: space-around;
 	border: 1px solid blue;
 }
 
 .play-data {
-    font-size: 2em;
+	font-size: 2em;
 }

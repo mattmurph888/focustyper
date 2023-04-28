@@ -1,9 +1,11 @@
 {% extends 'base.html' %} 
+{% load static %}
+
 {% block content %} 
     {% include 'navbar.html' %}
     <div class="play-area">
         <div class="play-info">
-            <div>Level {{level.level_number}}: </div>
+            <div>Level <span id="level-num">{{level.level_number}}</span>: </div>
             <div class="play-title">{{level.level_title}}</div>
         </div>
 
@@ -15,17 +17,21 @@
 
         <div class="play-stats">
             <div class="play-speed">
-                <div>speed (WPM): </div>
+                <div>Speed (WPM): </div>
                 <div class="play-data" id="speed">0</div>
             </div> 
             <div class="play-accuracy">
-                <div>accuracy: </div>
-                <div class="play-data">0</div>
+                <div>Accuracy (%): </div>
+                <div class="play-data" id="accuracy">0</div>
             </div> 
             <div class="play-focus">
-                <div>focus: </div>
+                <div>Focus: </div>
                 <div class="play-data">0</div>
             </div> 
         </div>
     </div>
+{% endblock %}
+
+{% block js_block %}
+    <script src="{% static 'js/play.js' %}"></script>
 {% endblock %}

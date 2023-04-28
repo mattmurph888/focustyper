@@ -14,6 +14,16 @@ def play(request, level_num=None):
     context = {'level': level}
     return render(request, 'play.html', context)
 
+def recap(request, data=None):
+    parsed_data = data.split('-')
+    print(parsed_data)
+    context = {
+        'level_num': parsed_data[0],
+        'speed': parsed_data[1],
+        'accuracy': parsed_data[2],
+    }
+    return render(request, 'recap.html', context)
+
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('home')
