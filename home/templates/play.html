@@ -26,11 +26,17 @@
             </div> 
             <div class="play-focus">
                 <div>Focus: </div>
-                <div class="play-data">0</div>
+                <div class="play-data" id="focus">100</div>
             </div> 
         </div>
     </div>
+
+    <form method="POST" action="{% url 'play' level.level_number %}" id="play-form"> 
+        {% csrf_token %}
+        {{ form.as_p }}
+    </post>
 {% endblock %}
+
 
 {% block js_block %}
     <script src="{% static 'js/play.js' %}"></script>

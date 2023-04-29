@@ -50,9 +50,11 @@ document.addEventListener(
 
                 // if we have reached the end of the text, turn off the timer
                 if (cur_char_index >= letters.length) {
+                    num_key_presses += 1; // need +1 for correct accuracy
+                    updateDisplays();
                     clearInterval(update_displays_var);
                     clearInterval(clock_var);
-                    setTimeout(toRecap, 2000);
+                    setTimeout(customSubmit, 2000);
                 }
 
 				// update the box shadow to the right letter only if not at the end
@@ -116,11 +118,19 @@ function clock() {
     cur_time += 0.1;
  }
 
-function toRecap() {
-    let recap_url = "http://127.0.0.1:8000/recap";
-    let level_num = document.getElementById('level-num').innerHTML;
-    let speed = document.getElementById('speed').innerHTML;
-    let accuracy = document.getElementById('accuracy').innerHTML;
-    let url = recap_url + "/" + level_num + "-" + speed + "-" + accuracy;
-    window.location.replace(url);
+// submits a hidden form on the play.html page
+// using the hidden form allows django to process the post in the recap view
+function customSubmit() {
+
+    console.log(document.getElementsByName('speed').value);
+    try {
+        document.getElementsByName('speed')[0].value = document.getElementById('speed').innerText;
+        document.getElementsByName('accuracy')[0].value = document.getElementById('accuracy').innerText;
+        document.getElementsByName('focus')[0].value = document.getElementById('focus').innerText;
+    } catch {
+        
+    }
+    let play_form = document.getElementById('play-form');
+    play_form.submit()
 }
+
