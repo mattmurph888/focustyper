@@ -33,36 +33,72 @@ def play(request, level_num=None):
     # If the user is not logged in, don't update the models
     if not user.is_authenticated:
         if request.method == 'POST':
-            print("not logged in")
-            return redirect('recap')
-        return render(request, 'play.html', {'level': level})
+            form = UserLevelRecordForm(user=None, level=level, data=request.POST)
+            if form.is_valid():
+                next_level = None
+                try:
+                    next_level = Level.objects.get(level_number=form.level.level_number+1)
+                except Level.DoesNotExist:
+                    next_level = None
+
+                context = {
+                    'level': form.level,
+                    'score': form.score,
+                    'accuracy': form.cleaned_data.get('accuracy'),
+                    'focus': form.cleaned_data.get('focus'),
+                    'speed': form.cleaned_data.get('speed'),
+                    'saved': False,
+                    'next_level': next_level,
+                    'logged_in': False,
+                }
+                return render(request, 'recap.html', context)
+        # If this is a GET request, display the form
+        form = UserLevelRecordForm(level=level, user=None)
+        context = {'form': form, 'level': level}
+        return render(request, 'play.html', context)
     
     # If this is a POST request, validate and save the new score
     if request.method == 'POST':
         form = UserLevelRecordForm(user=user, level=level, data=request.POST)
         if form.is_valid():
-            previous_records = User_Level_Record.objects.filter(user=form.user, level=form.level)
-            if previous_records:
-                previous_records.delete()
-                print('deleting previous records')
-            else:
-                print('no records to delete')
-            print(f'score: {form.score} || user: {form.user} || level: {form.level}')
-            print('saving new rocord')
-            record = form.save(commit=False)
-            record.user = form.user
-            record.level = form.level
-            record.score = form.score
-            record.save()
-        return redirect('recap')
+            saved = False
+            if form.is_high_score():
+                saved = True
+                previous_records = User_Level_Record.objects.filter(user=form.user, level=form.level)
+                if previous_records:
+                    previous_records.delete()
+                    print('deleting previous records')
+                else:
+                    print('no records to delete')
+                print('saving new rocord')
+                record = form.save(commit=False)
+                record.user = form.user
+                record.level = form.level
+                record.score = form.score
+                record.save()
+
+            next_level = None
+            try:
+                next_level = Level.objects.get(level_number=form.level.level_number+1)
+            except Level.DoesNotExist:
+                next_level = None
+
+            context = {
+                'level': form.level,
+                'score': form.score,
+                'accuracy': form.cleaned_data.get('accuracy'),
+                'focus': form.cleaned_data.get('focus'),
+                'speed': form.cleaned_data.get('speed'),
+                'saved': saved,
+                'next_level': next_level,
+                'logged_in': True,
+            }
+            return render(request, 'recap.html', context)
     
     # If this is a GET request, display the form
     form = UserLevelRecordForm(level=level, user=user)
     context = {'form': form, 'level': level}
     return render(request, 'play.html', context)
-    
-def recap(request):
-    return render(request, 'recap.html', {})
     
 def login_user(request):
     if request.user.is_authenticated:

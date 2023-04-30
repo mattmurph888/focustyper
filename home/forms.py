@@ -46,7 +46,7 @@ class UserLevelRecordForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.user = user
         self.level = level
-        self.score = self.get_highest_score()
+        self.score = None
         
     def get_highest_score(self):
         highest_score = 0
@@ -57,15 +57,20 @@ class UserLevelRecordForm(forms.ModelForm):
             print('no record found')
             pass
         return highest_score
+    
+    def calculate_score(self, speed, accuracy):
+        cleaned_data = super().clean()
+        return int(speed * accuracy / 100)
+    
+    def is_high_score(self):
+        high_score = self.get_highest_score()
+        print(f"score: {self.score} || high score: {high_score}")
+        if high_score and high_score >= self.score:
+            return False
+        return True
         
     def clean(self):
         cleaned_data = super().clean()
-        score = int(cleaned_data.get('speed') * cleaned_data.get('accuracy') / 100)
-        print(f"score: {score} || high score: {self.score}")
-        if self.score and score <= self.score:
-            print('not good enough')
-            raise forms.ValidationError('Your score is not higher than your previous score for this level.')
-        print('good enough')
-        self.score = score
+        self.score = self.calculate_score(cleaned_data.get('speed'), cleaned_data.get('accuracy'))
         return cleaned_data
 
