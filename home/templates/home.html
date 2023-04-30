@@ -3,25 +3,25 @@
 
 	{% include 'navbar.html' %}
 
-	<div class=" container col-md-8 ">
+	<div class="container">
 		<br><br><br>
 
 		<div class="row row-cols-1 row-cols-md-4 g-4">
 			{% for record in records %}
 				<div class="col">
 					<a href="{% url 'play' record.level.level_number %}" class="text-decoration-none">
-						<div class="card text-bg-secondary mb-3 h-100" style="max-width: 15rem;">
-							<div class="card-header"> 
+						<div class="card text-bg-secondary mb-3 h-100">
+							<div class="card-header bg-secondary text-light"> 
 								{{record.level.level_number}}) {{record.level.level_title}}
 							</div>
-							<div class="card-body">
+							<div class="card-body bg-light text-secondary">
 								{% if record.record %}
-									<div>Score: {{ record.record.score }}</div>
-									<div>Speed: {{ record.record.speed }} wpm</div>
-									<div>Accuracy: {{ record.record.accuracy }}%</div>
-									<div>Focus: {{ record.record.focus }}%</div>
+									<div class="card-text">Score: {{ record.record.score }}</div>
+									<div class="card-text">Speed: {{ record.record.speed }} wpm</div>
+									<div class="card-text">Accuracy: {{ record.record.accuracy }}%</div>
+									<div class="card-text">Focus: {{ record.record.focus }}%</div>
 								{% else %}
-									<div> Click to play level </div>
+									<div class="card-text">Click to play level</div>
 								{% endif %}
 							</div>
 						</div>

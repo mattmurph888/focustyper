@@ -9,7 +9,9 @@ let guessed = false;
 let update_speed_var;
 let clock_var;
 let num_key_presses = 0;
-letters[cur_char_index].style.boxShadow = '0px 1px 5px rgb(126, 126, 126)';
+let box_shadow = '0px 0px 5px 2px rgb(126, 126, 126)';
+letters[cur_char_index].style.boxShadow = box_shadow;
+letters[cur_char_index].style.zIndex = "2";
 document.addEventListener(
 	'keypress',
 	(event) => {
@@ -41,6 +43,7 @@ document.addEventListener(
 
 				// reset the box shadow on guessed letters
 				letters[cur_char_index].style.boxShadow = '';
+                letters[cur_char_index].style.zIndex = "1";
 
 				// move the text box to the left
 				text_box.style.transform = `translateX(-${cur_char_index + 1}em)`;
@@ -59,8 +62,8 @@ document.addEventListener(
 
 				// update the box shadow to the right letter only if not at the end
 				if (cur_char_index < letters.length) {
-					letters[cur_char_index].style.boxShadow =
-						'0px 3px 5px rgb(126, 126, 126)';
+                    letters[cur_char_index].style.zIndex = "2";
+					letters[cur_char_index].style.boxShadow = box_shadow;
 				}
 
 				// reset guessed for the next letter
@@ -128,7 +131,7 @@ function customSubmit() {
         document.getElementsByName('accuracy')[0].value = document.getElementById('accuracy').innerText;
         document.getElementsByName('focus')[0].value = document.getElementById('focus').innerText;
     } catch {
-        
+
     }
     let play_form = document.getElementById('play-form');
     play_form.submit()

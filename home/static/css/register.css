@@ -1,0 +1,18 @@
+.register-container {
+    height: calc(100% - 55px);
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.register-form-container {
+    padding:10px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    width: 50vw;
+    min-width: 400px;
+    max-width: 600px;
+    margin-top: 55px;
+    height:fit-content;
+}
