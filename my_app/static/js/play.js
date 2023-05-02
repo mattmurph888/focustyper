@@ -1,9 +1,42 @@
-// import '/static/js/RunningAverageDeque';
-import {RunningAverageDeque} from '/static/js/RunningAverageDeque.js';
+class RunningAverageDeque {
+	constructor(starting_array = []) {
+		this.items = starting_array;
+		this.sum = this.items.reduce((acc, curr) => acc + curr, 0);
+		this.average = this.sum / this.items.length;
+	}
 
-let avg_pos = new RunningAverageDeque([0,0,0,0,0]);
-// import './webgazer'
-console.log(avg_pos.items);
+	popFrontPushBack(element) {
+		let item = this.items.shift();
+		this.sum -= item;
+		this.items.push(element);
+		this.sum += element;
+		this.average = this.getAverage();
+	}
+
+	peekFront() {
+		return this.items[0];
+	}
+
+	peekBack() {
+		return this.items[this.items.length - 1];
+	}
+
+	isEmpty() {
+		return this.items.length === 0;
+	}
+
+	size() {
+		return this.items.length;
+	}
+
+	getAverage() {
+		if (this.isEmpty()) return 0;
+		return this.sum / this.size();
+	}
+}
+
+let avg_x = new RunningAverageDeque([0, 0, 0, 0, 0,0,0,0]);
+let avg_y = new RunningAverageDeque([0, 0, 0, 0, 0,0,0,0]);
 let webgazer_started = false;
 let x = 0;
 let y = 0;
@@ -14,10 +47,12 @@ webgazer
 			return;
 		}
 		if (webgazer_started == false) {
+			console.log(webgazer);
 			webgazer_started = true;
 		}
 		x = data.x; //these x coordinates are relative to the viewport
 		y = data.y; //these y coordinates are relative to the viewport
+
 		// console.log(parseInt(elapsedTime), parseInt(x), parseInt(y)); //elapsed time is based on time since begin was called
 	})
 	.begin();
@@ -144,9 +179,11 @@ function updateDisplays() {
  */
 function clock() {
 	cur_time += 0.1;
-	text_window.style.left = x - text_window.clientWidth / 2 + 'px';
-	text_window.style.top = y - text_window.clientHeight / 2 + 'px';
-	console.log(x, y);
+	avg_x.popFrontPushBack(x);
+	avg_y.popFrontPushBack(y);
+	text_window.style.left = avg_x.average - text_window.clientWidth / 2 + 'px';
+	text_window.style.top = avg_y.average - text_window.clientHeight / 2 + 'px';
+	// console.log(x, y);
 }
 
 // submits a hidden form on the play.html page
