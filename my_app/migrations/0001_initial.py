@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('speed', models.IntegerField(default=0)),
                 ('focus', models.IntegerField(default=0)),
                 ('score', models.IntegerField(default=0)),
-                ('level_id', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='home.level')),
+                ('level_id', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='my_app.level')),
                 ('user_id', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

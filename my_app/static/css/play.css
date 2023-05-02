@@ -98,3 +98,11 @@ nav {
 	background-color: #f2f2f2;
 	border-radius: 10px;
 }
+
+#text-window {
+	width: 50vh;
+	height: calc(50vh - 55px - 20px);
+	position: absolute;
+	border: 5px solid black;
+	transition: 0.5s;
+}

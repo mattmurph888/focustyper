@@ -35,6 +35,8 @@
         </div>
     </div>
 
+    <div id="text-window"></div>
+
     <form method="POST" action="{% url 'play' level.level_number %}" id="play-form"> 
         {% csrf_token %}
         {{ form.as_p }}
@@ -44,6 +46,8 @@
 {% endblock %}
 
 
-{% block js_block %}
-    <script src="{% static 'js/play.js' %}"></script>
+{% block js_block %}    
+    <script src="{% static 'js/webgazer.js' %}"></script>
+    <script type="module" src="{% static 'js/play.js' %}"></script>
+    <script type="module" src="{% static 'js/play.js' %}"></script>
 {% endblock %}
