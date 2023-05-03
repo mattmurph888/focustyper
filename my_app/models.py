@@ -8,7 +8,7 @@ class Level(models.Model):
     level_text = models.CharField(max_length=500)
 
     def __str__(self) -> str:
-        return f'Level Title: {self.level_title}'
+        return f'Level {self.level_number}: {self.level_title}'
     
 
 class User_Level_Record(models.Model):
@@ -16,7 +16,6 @@ class User_Level_Record(models.Model):
     level = models.ForeignKey(Level, on_delete=models.CASCADE, default=None)
     accuracy = models.IntegerField(default=0)
     speed = models.IntegerField(default=0)
-    focus = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
 
     def __str__(self) -> str:

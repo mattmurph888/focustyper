@@ -16,10 +16,9 @@
 							</div>
 							<div class="card-body bg-light text-secondary">
 								{% if record.record %}
-									<div class="card-text">Score: {{ record.record.score }}</div>
+									<div id="card-score" class="card-text">Score: {{ record.record.score }}</div>
 									<div class="card-text">Speed: {{ record.record.speed }} wpm</div>
 									<div class="card-text">Accuracy: {{ record.record.accuracy }}%</div>
-									<div class="card-text">Focus: {{ record.record.focus }}%</div>
 								{% else %}
 									<div class="card-text">Click to play level</div>
 								{% endif %}

@@ -28,14 +28,13 @@
                 <div>Accuracy (%): </div>
                 <div class="play-data" id="accuracy">0</div>
             </div> 
-            <div class="play-focus">
-                <div>Focus: </div>
-                <div class="play-data" id="focus">100</div>
-            </div> 
         </div>
+        {% comment %} <div id="top-cover"></div>
+        <div id="bottom-cover"></div> {% endcomment %}
+        <div id="tracker"></div>
     </div>
 
-    <div id="text-window"></div>
+    
 
     <form method="POST" action="{% url 'play' level.level_number %}" id="play-form"> 
         {% csrf_token %}
@@ -47,6 +46,5 @@
 
 
 {% block js_block %}    
-    <script src="{% static 'js/webgazer.js' %}"></script>
     <script src="{% static 'js/play.js' %}"></script>
 {% endblock %}

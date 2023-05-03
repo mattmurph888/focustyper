@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm, UserLevelRecordForm
 from .models import Level, User_Level_Record
-from django.views.decorators.csrf import csrf_protect
 
 def home(request):
     levels = Level.objects.all()
@@ -11,6 +10,7 @@ def home(request):
     user = request.user
     for level in levels:
         if user.is_authenticated:
+            # checks if the user has a record for that level already
             try:
                 record = User_Level_Record.objects.get(level=level, user=user)
                 records.append({'level': level, 'record': record})
@@ -35,6 +35,7 @@ def play(request, level_num=None):
         if request.method == 'POST':
             form = UserLevelRecordForm(user=None, level=level, data=request.POST)
             if form.is_valid():
+                # check if we are at the final level, toggles the next level button the on the recap page
                 next_level = None
                 try:
                     next_level = Level.objects.get(level_number=form.level.level_number+1)
@@ -45,7 +46,6 @@ def play(request, level_num=None):
                     'level': form.level,
                     'score': form.score,
                     'accuracy': form.cleaned_data.get('accuracy'),
-                    'focus': form.cleaned_data.get('focus'),
                     'speed': form.cleaned_data.get('speed'),
                     'saved': False,
                     'next_level': next_level,
@@ -57,7 +57,7 @@ def play(request, level_num=None):
         context = {'form': form, 'level': level}
         return render(request, 'play.html', context)
     
-    # If this is a POST request, validate and save the new score
+    # If this is a POST request and the user is logged in, validate and save the new score
     if request.method == 'POST':
         form = UserLevelRecordForm(user=user, level=level, data=request.POST)
         if form.is_valid():
@@ -67,16 +67,13 @@ def play(request, level_num=None):
                 previous_records = User_Level_Record.objects.filter(user=form.user, level=form.level)
                 if previous_records:
                     previous_records.delete()
-                    print('deleting previous records')
-                else:
-                    print('no records to delete')
-                print('saving new rocord')
                 record = form.save(commit=False)
                 record.user = form.user
                 record.level = form.level
                 record.score = form.score
                 record.save()
 
+            # check if we are at the final level, toggles the next level button the on the recap page
             next_level = None
             try:
                 next_level = Level.objects.get(level_number=form.level.level_number+1)
@@ -87,7 +84,6 @@ def play(request, level_num=None):
                 'level': form.level,
                 'score': form.score,
                 'accuracy': form.cleaned_data.get('accuracy'),
-                'focus': form.cleaned_data.get('focus'),
                 'speed': form.cleaned_data.get('speed'),
                 'saved': saved,
                 'next_level': next_level,

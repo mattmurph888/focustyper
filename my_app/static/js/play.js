@@ -1,94 +1,34 @@
-class RunningAverageDeque {
-	constructor(starting_array = []) {
-		this.items = starting_array;
-		this.sum = this.items.reduce((acc, curr) => acc + curr, 0);
-		this.average = this.sum / this.items.length;
-	}
+let text_box = document.getElementById('play-text'); 	// box that wraps the level text
+let letters = text_box.children; 						// array of the individual letter elements
+let cur_char_index = 0;									// index of the current letter being typed
+let guessed = false;									// have you made a key press at the current key	
+let update_displays_var;								// setInterval variable for updating state displays
+let clock_var = setInterval(clock, 100);				// updates the clock
+let cur_time = 0;										// keeps how much time has passed in tenths of seconds
+let num_key_presses = 0;								// total number of key presses. Starts counting with the first correct key press
+let box_shadow = '0px 0px 5px 2px rgb(126, 126, 126)';	// box shadow that goes around the current letter
+let time_started = false;								// have you guessed the first letter correctly
 
-	popFrontPushBack(element) {
-		let item = this.items.shift();
-		this.sum -= item;
-		this.items.push(element);
-		this.sum += element;
-		this.average = this.getAverage();
-	}
-
-	peekFront() {
-		return this.items[0];
-	}
-
-	peekBack() {
-		return this.items[this.items.length - 1];
-	}
-
-	isEmpty() {
-		return this.items.length === 0;
-	}
-
-	size() {
-		return this.items.length;
-	}
-
-	getAverage() {
-		if (this.isEmpty()) return 0;
-		return this.sum / this.size();
-	}
-}
-
-let avg_x = new RunningAverageDeque([0, 0, 0, 0, 0,0,0,0]);
-let avg_y = new RunningAverageDeque([0, 0, 0, 0, 0,0,0,0]);
-let webgazer_started = false;
-let x = 0;
-let y = 0;
-webgazer.showVideo(false);
-webgazer
-	.setGazeListener(function (data, elapsedTime) {
-		if (data == null) {
-			return;
-		}
-		if (webgazer_started == false) {
-			console.log(webgazer);
-			webgazer_started = true;
-		}
-		x = data.x; //these x coordinates are relative to the viewport
-		y = data.y; //these y coordinates are relative to the viewport
-
-		// console.log(parseInt(elapsedTime), parseInt(x), parseInt(y)); //elapsed time is based on time since begin was called
-	})
-	.begin();
+letters[cur_char_index].style.boxShadow = box_shadow;	// set the cur letter with the box shadow
+letters[cur_char_index].style.zIndex = '2';				// make sure the cur letter is in the front
 
 /**
  * When key press
  * only tracks alphanumeric keys
  */
-let text_window = document.getElementById('text-window');
-let text_box = document.getElementById('play-text');
-let letters = text_box.children;
-let cur_char_index = 0;
-let guessed = false;
-
-let update_speed_var;
-let update_displays_var;
-let clock_var = setInterval(clock, 100);
-let cur_time = 0;
-let num_key_presses = 0;
-let box_shadow = '0px 0px 5px 2px rgb(126, 126, 126)';
-let time_started = true;
-letters[cur_char_index].style.boxShadow = box_shadow;
-letters[cur_char_index].style.zIndex = '2';
 document.addEventListener(
 	'keypress',
 	(event) => {
 		let name = event.key;
-		let code = event.code;
 
 		// if you have not finished the level
-		if (cur_char_index < letters.length && webgazer_started) {
+		if (cur_char_index < letters.length) {
 			// take away the previous wrong letter overlay
 			letters[cur_char_index].style.setProperty('--letter_opacity', '0');
 
 			// when you type the correct letter
 			if (name == letters[cur_char_index].innerHTML) {
+
 				// start the timer if it has not already
 				if (!time_started) {
 					update_displays_var = setInterval(updateDisplays, 1000);
@@ -137,10 +77,13 @@ document.addEventListener(
 				letters[cur_char_index].style.setProperty('--letter_opacity', '1');
 
 				// set to true so that the letter turns yellow instead of green
-				guessed = true;
+				if (time_started) {
+					guessed = true;
+				}
+				
 			}
 		}
-
+		
 		// increment the number of key presses
 		if (time_started) {
 			num_key_presses += 1;
@@ -149,21 +92,22 @@ document.addEventListener(
 	false
 );
 
+
 /**
  * When key up
  */
 document.addEventListener('keyup', (event) => {
+	// if you are not done with the lesson
 	if (cur_char_index < letters.length) {
-		// if you are not done with the lesson
 		// remove the wrong letter overlay
 		letters[cur_char_index].style.setProperty('--letter_opacity', '0');
 	}
 });
 
+
 /**
  * displays data from the current lesson being played
  */
-time_started = false;
 function updateDisplays() {
 	// calculate and display the current speed in wpm
 	let cur_speed = parseInt(cur_char_index / 5 / (cur_time / 60));
@@ -178,25 +122,19 @@ function updateDisplays() {
  * runs the clock
  */
 function clock() {
-	cur_time += 0.1;
-	avg_x.popFrontPushBack(x);
-	avg_y.popFrontPushBack(y);
-	text_window.style.left = avg_x.average - text_window.clientWidth / 2 + 'px';
-	text_window.style.top = avg_y.average - text_window.clientHeight / 2 + 'px';
-	// console.log(x, y);
+	cur_time += 0.1; // time is kept in tenths of seconds
 }
 
-// submits a hidden form on the play.html page
-// using the hidden form allows django to process the post in the recap view
+
+/**
+ * submits a hidden form on the play.html page
+ * using the hidden form allows django to process the post in the recap view
+ */
 function customSubmit() {
 	console.log(document.getElementsByName('speed').value);
 	try {
-		document.getElementsByName('speed')[0].value =
-			document.getElementById('speed').innerText;
-		document.getElementsByName('accuracy')[0].value =
-			document.getElementById('accuracy').innerText;
-		document.getElementsByName('focus')[0].value =
-			document.getElementById('focus').innerText;
+		document.getElementsByName('speed')[0].value = document.getElementById('speed').innerText;
+		document.getElementsByName('accuracy')[0].value = document.getElementById('accuracy').innerText;
 	} catch {}
 
 	let play_form = document.getElementById('play-form');

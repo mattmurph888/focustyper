@@ -35,11 +35,10 @@ class SignUpForm(UserCreationForm):
 class UserLevelRecordForm(forms.ModelForm):
     class Meta:
         model = User_Level_Record
-        fields = ['accuracy', 'speed', 'focus']
+        fields = ['accuracy', 'speed']
         widgets = {
             'accuracy': forms.HiddenInput(),
             'speed': forms.HiddenInput(),
-            'focus': forms.HiddenInput(),
         }
         
     def __init__(self, user, level, *args, **kwargs):
@@ -47,7 +46,8 @@ class UserLevelRecordForm(forms.ModelForm):
         self.user = user
         self.level = level
         self.score = None
-        
+    
+    # gets the highest score for this level in the database
     def get_highest_score(self):
         highest_score = 0
         try:
@@ -58,17 +58,20 @@ class UserLevelRecordForm(forms.ModelForm):
             pass
         return highest_score
     
+    # caluclates the score from the speed and accuracy
     def calculate_score(self, speed, accuracy):
         cleaned_data = super().clean()
         return int(speed * accuracy / 100)
     
-    def is_high_score(self):
+    # check if the current score is the highest score for this level in the database
+    def is_high_score(self): 
         high_score = self.get_highest_score()
         print(f"score: {self.score} || high score: {high_score}")
         if high_score and high_score >= self.score:
             return False
         return True
-        
+    
+    # updates self.score
     def clean(self):
         cleaned_data = super().clean()
         self.score = self.calculate_score(cleaned_data.get('speed'), cleaned_data.get('accuracy'))
